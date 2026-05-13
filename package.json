@@ -1,5 +1,11 @@
 {
   "dependencies": {
+    "animate.css": "^4.1.1",
     "daisyui": "^5.5.19"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.5.0",
+    "postcss": "^8.5.14",
+    "tailwindcss": "^4.3.0"
   }
 }
