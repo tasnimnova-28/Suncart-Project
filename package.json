@@ -6,21 +6,24 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "next lint"
   },
   "dependencies": {
-    "animate.css": "^4.1.1",
-    "better-auth": "^1.6.11",
     "next": "16.2.6",
     "react": "19.2.4",
     "react-dom": "19.2.4",
-    "react-hot-toast": "^2.6.0"
+    "better-auth": "^1.6.11",
+    "react-hot-toast": "^2.6.0",
+    "animate.css": "^4.1.1",
+    "daisyui": "^5.5.19"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4",
-    "babel-plugin-react-compiler": "1.0.0",
     "eslint": "^9",
     "eslint-config-next": "16.2.6",
-    "tailwindcss": "^4"
+    "tailwindcss": "^4.3.0",
+    "postcss": "^8.5.14",
+    "autoprefixer": "^10.5.0",
+    "@tailwindcss/postcss": "^4",
+    "babel-plugin-react-compiler": "1.0.0"
   }
 }
