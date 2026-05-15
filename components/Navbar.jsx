@@ -60,8 +60,7 @@ export default function Navbar() {
         <div className="md:hidden bg-amber-500 px-4 pb-4 flex flex-col gap-3 animate__animated animate__fadeInDown">
           <Link href="/" className="text-white font-medium" onClick={() => setMenuOpen(false)}>Home</Link>
           <Link href="/products" className="text-white font-medium" onClick={() => setMenuOpen(false)}>Products</Link>
-          <Link href="/profile" className="text-white font-medium hover:text-orange-900 transition">My Profile</Link>
-          {user ? (
+<Link href="/profile" className="text-white font-medium hover:text-orange-900 transition">My Profile</Link>          {user ? (
             <button className="btn btn-sm bg-white text-orange-500 w-full">Logout</button>
           ) : (
             <>

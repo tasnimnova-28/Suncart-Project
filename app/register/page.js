@@ -1,12 +1,8 @@
 'use client';
 import { useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import toast from 'react-hot-toast';
-import { authClient } from '@/lib/auth-client';
 
 export default function RegisterPage() {
-  const router = useRouter();
   const [form, setForm] = useState({ name: '', email: '', image: '', password: '' });
   const [loading, setLoading] = useState(false);
 
@@ -14,77 +10,97 @@ export default function RegisterPage() {
 
   const handleRegister = async (e) => {
     e.preventDefault();
-    if (form.password.length < 8) {
-      toast.error('Password must be at least 8 characters.');
-      return;
-    }
     setLoading(true);
-    try {
-      const { error } = await authClient.signUp.email({
-        email: form.email,
-        password: form.password,
-        name: form.name,
-        image: form.image || undefined,
-      });
-      if (error) {
-        toast.error(error.message || 'Registration failed.');
-      } else {
-        toast.success('Account created! Please log in. 🎉');
-        router.push('/login');
-      }
-    } catch (err) {
-      toast.error('Something went wrong. Please try again.');
-    } finally {
-      setLoading(false);
-    }
+    setTimeout(() => setLoading(false), 1500);
   };
 
-  const handleGoogleLogin = async () => {
-    await authClient.signIn.social({ provider: 'google', callbackURL: '/' });
+  const inputStyle = {
+    width:'100%', padding:'14px 16px', borderRadius:'12px',
+    border:'2px solid #fed7aa', outline:'none', fontSize:'15px',
+    boxSizing:'border-box', fontFamily:'sans-serif'
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-100 via-orange-50 to-yellow-100 flex items-center justify-center px-4 py-12">
-      <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md p-8 animate__animated animate__fadeInUp">
-        <div className="text-center mb-8">
-          <div className="text-5xl mb-2">🌴</div>
-          <h1 className="text-3xl font-bold text-orange-500">Create Account</h1>
-          <p className="text-gray-500 mt-1">Join the SunCart family</p>
+    <div style={{
+      minHeight:'100vh',
+      background:'linear-gradient(135deg, #f97316 0%, #facc15 50%, #ef4444 100%)',
+      display:'flex', alignItems:'center', justifyContent:'center',
+      padding:'20px', fontFamily:'sans-serif'
+    }}>
+      <div style={{
+        background:'white', borderRadius:'28px', padding:'48px 40px',
+        width:'100%', maxWidth:'440px',
+        boxShadow:'0 25px 60px rgba(0,0,0,0.15)'
+      }}>
+        <div style={{textAlign:'center', marginBottom:'28px'}}>
+          <div style={{fontSize:'52px', marginBottom:'8px'}}>🌴</div>
+          <h1 style={{fontSize:'28px', fontWeight:'800', color:'#ea580c', margin:'0 0 6px'}}>Join SunCart!</h1>
+          <p style={{color:'#9ca3af', margin:0, fontSize:'14px'}}>Create your free account today</p>
         </div>
 
-        <form onSubmit={handleRegister} className="flex flex-col gap-4">
-          <div className="form-control">
-            <label className="label"><span className="label-text font-medium">Full Name</span></label>
-            <input type="text" name="name" required className="input input-bordered focus:input-warning" placeholder="Your name" value={form.name} onChange={handleChange} />
-          </div>
-          <div className="form-control">
-            <label className="label"><span className="label-text font-medium">Email</span></label>
-            <input type="email" name="email" required className="input input-bordered focus:input-warning" placeholder="you@example.com" value={form.email} onChange={handleChange} />
-          </div>
-          <div className="form-control">
-            <label className="label"><span className="label-text font-medium">Photo URL (optional)</span></label>
-            <input type="url" name="image" className="input input-bordered focus:input-warning" placeholder="https://example.com/photo.jpg" value={form.image} onChange={handleChange} />
-          </div>
-          <div className="form-control">
-            <label className="label"><span className="label-text font-medium">Password</span></label>
-            <input type="password" name="password" required className="input input-bordered focus:input-warning" placeholder="Min. 8 characters" value={form.password} onChange={handleChange} />
-          </div>
+        <form onSubmit={handleRegister} style={{display:'flex', flexDirection:'column', gap:'14px'}}>
+          {[
+            {label:'Full Name', name:'name', type:'text', placeholder:'Your full name'},
+            {label:'Email Address', name:'email', type:'email', placeholder:'you@example.com'},
+            {label:'Photo URL (optional)', name:'image', type:'url', placeholder:'https://...'},
+            {label:'Password', name:'password', type:'password', placeholder:'Min. 8 characters'},
+          ].map(field => (
+            <div key={field.name}>
+              <label style={{display:'block', fontWeight:'600', color:'#374151', marginBottom:'6px', fontSize:'14px'}}>
+                {field.label}
+              </label>
+              <input
+                type={field.type} name={field.name} placeholder={field.placeholder}
+                required={field.name !== 'image'}
+                value={form[field.name]} onChange={handleChange}
+                style={inputStyle}
+                onFocus={e => e.target.style.borderColor='#f97316'}
+                onBlur={e => e.target.style.borderColor='#fed7aa'}
+              />
+            </div>
+          ))}
 
-          <button type="submit" className="btn bg-gradient-to-r from-orange-400 to-amber-400 text-white border-none hover:from-orange-500 hover:to-amber-500 mt-2" disabled={loading}>
-            {loading ? <span className="loading loading-spinner loading-sm"></span> : 'Create Account'}
+          {form.image && (
+            <div style={{textAlign:'center'}}>
+              <img src={form.image} alt="preview"
+                style={{width:'60px', height:'60px', borderRadius:'50%', objectFit:'cover', border:'3px solid #f97316'}}
+              />
+            </div>
+          )}
+
+          <button
+            type="submit" disabled={loading}
+            style={{
+              width:'100%', padding:'15px',
+              background: loading ? '#fdba74' : 'linear-gradient(135deg, #f97316, #eab308)',
+              color:'white', border:'none', borderRadius:'12px',
+              fontSize:'16px', fontWeight:'700', cursor:'pointer', marginTop:'4px'
+            }}
+          >
+            {loading ? '⏳ Creating account...' : '🚀 Create My Account'}
           </button>
         </form>
 
-        <div className="divider my-4">OR</div>
+        <div style={{display:'flex', alignItems:'center', gap:'12px', margin:'20px 0'}}>
+          <div style={{flex:1, height:'1px', background:'#e5e7eb'}}/>
+          <span style={{color:'#9ca3af', fontSize:'13px'}}>OR</span>
+          <div style={{flex:1, height:'1px', background:'#e5e7eb'}}/>
+        </div>
 
-        <button onClick={handleGoogleLogin} className="btn btn-outline w-full gap-2 hover:bg-orange-50 hover:border-orange-400">
-          <img src="https://www.svgrepo.com/show/475656/google-color.svg" className="w-5 h-5" alt="Google" />
+        <button style={{
+          width:'100%', padding:'14px', background:'white',
+          border:'2px solid #e5e7eb', borderRadius:'12px',
+          fontSize:'15px', fontWeight:'600', color:'#374151',
+          cursor:'pointer', display:'flex', alignItems:'center',
+          justifyContent:'center', gap:'10px'
+        }}>
+          <img src="https://www.svgrepo.com/show/475656/google-color.svg" style={{width:'20px', height:'20px'}} alt="G"/>
           Continue with Google
         </button>
 
-        <p className="text-center text-gray-500 mt-6 text-sm">
+        <p style={{textAlign:'center', color:'#6b7280', marginTop:'24px', fontSize:'14px'}}>
           Already have an account?{' '}
-          <Link href="/login" className="text-orange-500 font-semibold hover:underline">Login</Link>
+          <Link href="/login" style={{color:'#f97316', fontWeight:'700', textDecoration:'none'}}>Login →</Link>
         </p>
       </div>
     </div>
