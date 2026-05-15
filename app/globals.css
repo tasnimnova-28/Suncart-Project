@@ -4,3 +4,11 @@
 body {
   background-color: #fffbeb;
 }
+input {
+  color: #1f2937 !important;
+  background-color: #d3bbbb !important;
+}
+
+input::placeholder {
+  color: #030e22 !important;
+}

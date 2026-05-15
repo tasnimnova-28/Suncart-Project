@@ -56,13 +56,13 @@
   },
   {
     "id": "6",
-    "name": "Inflatable Beach Cooler Bag",
+    "name": "Inflatable Beach Soap",
     "brand": "WaveBreaker",
     "price": 39.99,
     "rating": 4.4,
     "stock": 15,
     "description": "Portable insulated cooler bag with inflatable walls for maximum cold retention. Holds 20 cans — keep drinks cold all day at the beach.",
-    "image": "https://images.unsplash.com/photo-1622992617820-0ef1e12cefc6?w=600",
+    "image":"https://images.unsplash.com/photo-1600857544200-b2f666a9a2ec?w=600",
     "category": "Beach Accessories"
   }
 ]

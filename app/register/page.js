@@ -1,17 +1,49 @@
 'use client';
 import { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { authClient } from '@/lib/auth-client';
 
 export default function RegisterPage() {
+  const router = useRouter();
   const [form, setForm] = useState({ name: '', email: '', image: '', password: '' });
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleRegister = async (e) => {
     e.preventDefault();
+    setError('');
+
+    if (form.password.length < 8) {
+      setError('Password must be at least 8 characters.');
+      return;
+    }
+
     setLoading(true);
-    setTimeout(() => setLoading(false), 1500);
+    try {
+      const { error } = await authClient.signUp.email({
+        email: form.email,
+        password: form.password,
+        name: form.name,
+        image: form.image || undefined,
+      });
+
+      if (error) {
+        setError(error.message || 'Registration failed. Please try again.');
+      } else {
+        router.push('/login');
+      }
+    } catch (err) {
+      setError('Something went wrong. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogle = async () => {
+    await authClient.signIn.social({ provider: 'google', callbackURL: '/' });
   };
 
   const inputStyle = {
@@ -37,6 +69,17 @@ export default function RegisterPage() {
           <h1 style={{fontSize:'28px', fontWeight:'800', color:'#ea580c', margin:'0 0 6px'}}>Join SunCart!</h1>
           <p style={{color:'#9ca3af', margin:0, fontSize:'14px'}}>Create your free account today</p>
         </div>
+
+        {/* Error message */}
+        {error && (
+          <div style={{
+            background:'#fef2f2', border:'1px solid #fecaca',
+            color:'#dc2626', padding:'12px 16px', borderRadius:'10px',
+            marginBottom:'16px', fontSize:'14px'
+          }}>
+            ⚠️ {error}
+          </div>
+        )}
 
         <form onSubmit={handleRegister} style={{display:'flex', flexDirection:'column', gap:'14px'}}>
           {[
@@ -74,7 +117,8 @@ export default function RegisterPage() {
               width:'100%', padding:'15px',
               background: loading ? '#fdba74' : 'linear-gradient(135deg, #f97316, #eab308)',
               color:'white', border:'none', borderRadius:'12px',
-              fontSize:'16px', fontWeight:'700', cursor:'pointer', marginTop:'4px'
+              fontSize:'16px', fontWeight:'700', cursor: loading ? 'not-allowed' : 'pointer',
+              marginTop:'4px'
             }}
           >
             {loading ? '⏳ Creating account...' : '🚀 Create My Account'}
@@ -87,13 +131,16 @@ export default function RegisterPage() {
           <div style={{flex:1, height:'1px', background:'#e5e7eb'}}/>
         </div>
 
-        <button style={{
-          width:'100%', padding:'14px', background:'white',
-          border:'2px solid #e5e7eb', borderRadius:'12px',
-          fontSize:'15px', fontWeight:'600', color:'#374151',
-          cursor:'pointer', display:'flex', alignItems:'center',
-          justifyContent:'center', gap:'10px'
-        }}>
+        <button
+          onClick={handleGoogle}
+          style={{
+            width:'100%', padding:'14px', background:'white',
+            border:'2px solid #e5e7eb', borderRadius:'12px',
+            fontSize:'15px', fontWeight:'600', color:'#374151',
+            cursor:'pointer', display:'flex', alignItems:'center',
+            justifyContent:'center', gap:'10px'
+          }}
+        >
           <img src="https://www.svgrepo.com/show/475656/google-color.svg" style={{width:'20px', height:'20px'}} alt="G"/>
           Continue with Google
         </button>
