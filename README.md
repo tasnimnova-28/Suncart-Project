@@ -37,7 +37,7 @@ npm run dev
 ```
 
 ## 🌐 Live Demo
-[https://suncart.vercel.app](https://suncart.vercel.app)
+[[https://suncart.vercel.app](https://suncart.vercel.app)](https://suncart-project-summer.vercel.app/)
 
 ## 📦 GitHub
-[https://github.com/YOUR_USERNAME/suncart](https://github.com/YOUR_USERNAME/suncart)
+[[https://github.com/YO/suncart](https://github.com/YOUR_USERNAME/suncart)](https://github.com/tasnimnova-28/Suncart-Project)
